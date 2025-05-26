@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Uganda Net Pay Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Uganda Revenue Authority" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header Section -->
+    <header class="header-container">
+      <div class="theme-control">
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" />
+          <span class="slider round"></span>
+        </label>
+        <span class="toggle-label">Dark Mode</span>
+      </div>
+
+      <h1>Uganda Net Pay Calculator</h1>
+      <div id="dateTime" class="date-time" aria-live="polite"></div>
+    </header>
+
+    <!-- Main Calculator Content -->
+    <main>
+      
+      <!-- Input Section -->
+      <section class="calculator-section">
+        <form id="netPayForm">
+          <div class="input-group">
+            <label for="grossSalary">
+              Gross Salary (UGX)
+              <span class="tooltip">?
+                <span class="tooltiptext">Basic salary before any deductions</span>
+              </span>
+            </label>
+            <input
+              type="number"
+              id="grossSalary"
+              min="0"
+              required
+              aria-label="Enter gross salary in Ugandan Shillings"
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="salaryType">Salary Type:</label>
+            <select id="salaryType">
+              <option value="monthly" selected>Monthly</option>
+              <option value="annual">Annual</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="nssfOption">NSSF Option:</label>
+            <select id="nssfOption">
+              <option value="none">None</option>
+              <option value="employee">Employee Only (5%)</option>
+              <option value="employer">Employer Only (10%)</option>
+              <option value="both">Both Employee & Employer</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="housingAllowance">Housing Allowance:</label>
+            <input type="number" id="housingAllowance" value="0" />
+          </div>
+
+          <div class="input-group">
+            <label for="transportAllowance">Transport Allowance:</label>
+            <input type="number" id="transportAllowance" value="0" />
+          </div>
+
+          <div class="input-group">
+            <label for="otherDeductions">Other Deductions:</label>
+            <input type="number" id="otherDeductions" value="0" />
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" class="primary" onclick="calculateNetPay()">
+              Calculate
+            </button>
+            <button type="reset" class="secondary" onclick="resetForm()">Reset</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Results Section -->
+      <section class="results-section" aria-live="polite">
+        <h2>Calculation Results</h2>
+        <div class="results-grid">
+          <p>PAYE: <span id="payeResult">0</span> UGX</p>
+          <p>NSSF (Employee): <span id="nssfEmployee">0</span> UGX</p>
+          <p>NSSF (Employer): <span id="nssfEmployer">0</span> UGX</p>
+          <p>Total Deductions: <span id="totalDeductions">0</span> UGX</p>
+          <p class="highlight">Net Pay: <span id="netPay">0</span> UGX</p>
+          <p>Employer Total Cost: <span id="employerCost">0</span> UGX</p>
+        </div>
+
+        <div class="paye-breakdown">
+          <h3>PAYE Calculation Breakdown</h3>
+          <pre id="payeCalculationSteps" class="breakdown-content"></pre>
+        </div>
+      </section>
+
+      <!-- Visualization Section -->
+      <section class="visualization">
+        <div class="chart-container">
+          <canvas id="deductionChart" width="400" height="200"></canvas>
+        </div>
+        <button onclick="downloadSummaryPDF()" class="download-btn">Download Summary</button>
+      </section>
+
+      <!-- History Section -->
+      <section class="history-section" aria-label="Calculation history">
+        <h2>
+          <button
+            class="history-toggle"
+            onclick="toggleHistory()"
+            aria-expanded="false"
+            aria-controls="historyContent"
+          >
+            ▼ Calculation History
+          </button>
+        </h2>
+        <div id="historyContent" class="history-content" hidden>
+          <button onclick="clearHistory()" class="clear-history">Clear History</button>
+          <ul id="historyList" role="list"></ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="page-footer">
+      <p>&copy; 2025 Uganda Revenue Authority &amp; SwaibuTech. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
